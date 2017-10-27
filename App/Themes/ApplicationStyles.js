@@ -9,7 +9,7 @@ const ApplicationStyles = {
   screen: {
     mainContainer: {
       flex: 1,
-      backgroundColor: Colors.transparent
+      backgroundColor: Colors.eggplant
     },
     backgroundImage: {
       position: 'absolute',
@@ -21,7 +21,7 @@ const ApplicationStyles = {
     container: {
       flex: 1,
       paddingTop: Metrics.baseMargin,
-      backgroundColor: Colors.transparent
+      backgroundColor: Colors.eggplant
     },
     section: {
       margin: Metrics.section,
@@ -42,7 +42,7 @@ const ApplicationStyles = {
     },
     titleText: {
       ...Fonts.style.h2,
-      fontSize: 14,
+      fontSize: 30,
       color: Colors.text
     }
   },
