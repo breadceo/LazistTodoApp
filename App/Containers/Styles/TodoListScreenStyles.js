@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native'
-import { Metrics, ApplicationStyles } from '../../Themes/'
+import { Fonts, Colors, Metrics, ApplicationStyles } from '../../Themes/'
 
 export default StyleSheet.create({
   ...ApplicationStyles.screen,
@@ -14,5 +14,17 @@ export default StyleSheet.create({
   },
   centered: {
     alignItems: 'center'
+  },
+  itemSection: {
+    margin: Metrics.section,
+    padding: Metrics.baseMargin
+  },
+  listItemText: {
+    ...Fonts.style.h4,
+    color: Colors.snow,
+    textAlign: 'left'
+  },
+  listItemDoneText: {
+    textDecorationLine: 'line-through'
   }
 })
