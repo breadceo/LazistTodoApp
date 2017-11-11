@@ -1,34 +1,35 @@
 import { createReducer, createActions } from 'reduxsauce'
 import Immutable from 'seamless-immutable'
 import { filter } from 'ramda'
+import _ from 'lodash'
 
 const { Types, Creators } = createActions({
     create: [],
     read: ['id'],
-    updateItem: ['id', 'data'],
+    toggleDone: ['id'],
     deleteItem: ['id']
 })
 
 export const TodoListTypes = Types
 export default Creators
 
-export const INITIAL_STATE = Immutable({
+const INITIAL_STATE = Immutable({
     items: [],
     read_item: undefined,
     updatedAt: undefined
 })
 
-export const create = (state) => {
+const create = (state) => {
     let item = {
         id: state.items.length + 1,
-        checked: false,
+        done: false,
         title: " "
     }
     let next = state.merge({items: [...state.items, item], updatedAt: Date.now()})
     return next
 }
 
-export const read = (state, { id }) => {
+const read = (state, { id }) => {
     if (id === undefined) {
         return state.merge({updatedAt: Date.now()})
     } else {
@@ -40,7 +41,29 @@ export const read = (state, { id }) => {
     }
 }
 
+const toggleDone = (state, { id }) => {
+    console.log('toggleDone')
+    let index = _.findIndex(state.items, (item) => {
+        item.id === id
+    })
+    if (index === -1) {
+        return state
+    }
+    let target = state.items[index]
+    let next = state.merge({
+        items: [
+            ...state.items.slice(0, index),
+            Object.assign({}, state.items[index], {
+                done: !target.done
+            }),
+            ...state.items.slice(index+1)
+        ]
+    })
+    return next
+}
+
 export const reducer = createReducer(INITIAL_STATE, {
     [Types.CREATE]: create,
     [Types.READ]: read,
+    [Types.TOGGLEDONE]: toggleDone,
 })
