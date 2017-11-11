@@ -19,6 +19,10 @@ export default StyleSheet.create({
     margin: Metrics.section,
     padding: Metrics.baseMargin
   },
+  listItemContainer: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
   listItemText: {
     ...Fonts.style.h4,
     color: Colors.snow,

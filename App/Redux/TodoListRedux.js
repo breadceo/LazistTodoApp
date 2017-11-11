@@ -6,7 +6,7 @@ import _ from 'lodash'
 const { Types, Creators } = createActions({
     create: [],
     read: ['id'],
-    toggleDone: ['id'],
+    toggle: ['id'],
     deleteItem: ['id']
 })
 
@@ -42,10 +42,7 @@ const read = (state, { id }) => {
 }
 
 const toggleDone = (state, { id }) => {
-    console.log('toggleDone')
-    let index = _.findIndex(state.items, (item) => {
-        item.id === id
-    })
+    let index = _.findIndex(state.items, (item) => item.id === id)
     if (index === -1) {
         return state
     }
@@ -65,5 +62,5 @@ const toggleDone = (state, { id }) => {
 export const reducer = createReducer(INITIAL_STATE, {
     [Types.CREATE]: create,
     [Types.READ]: read,
-    [Types.TOGGLEDONE]: toggleDone,
+    [Types.TOGGLE]: toggleDone,
 })
