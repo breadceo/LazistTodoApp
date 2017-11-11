@@ -75,7 +75,7 @@ class TodoListItem extends Component {
     render() {
         return (
             <CheckBox 
-                rightText={this.props.data.text}
+                rightText={this.props.data.title}
                 rightTextStyle={[styles.listItemText, this.props.data.checked && styles.listItemDoneText]}
                 isChecked={this.props.data.checked}
                 checkBoxColor={Colors.snow}

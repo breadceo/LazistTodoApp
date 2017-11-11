@@ -22,7 +22,7 @@ export const create = (state) => {
     let item = {
         id: state.items.length + 1,
         checked: false,
-        title: ""
+        title: " "
     }
     let next = state.merge({items: [...state.items, item], updatedAt: Date.now()})
     return next
