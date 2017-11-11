@@ -2,12 +2,24 @@ import React, { Component } from 'react'
 import { ScrollView, Text, Image, View, FlatList } from 'react-native'
 import CheckBox from 'react-native-check-box'
 import { Colors, Images } from '../Themes'
+import { connect } from 'react-redux'
+import TodoListActions from '../Redux/TodoListRedux'
+import ButtonComponent, { CircleButton, RoundButton, RectangleButton } from 'react-native-button-component';
 
 // Styles
 import styles from './Styles/TodoListScreenStyles'
 
-export default class TodoListScreen extends Component {
+class TodoListScreen extends Component {
+    constructor(props) {
+        super(props);
+    }
+
+    componentWillMount() {
+        this.props.readAll()
+    }
+    
     render () {
+        const { todolist } = this.props
         return (
         <View style={styles.mainContainer}>
             <View style={styles.section}>
@@ -16,8 +28,13 @@ export default class TodoListScreen extends Component {
                 </Text>
             </View>
             <ScrollView style={styles.section}>
-                <TodoList />
+                <TodoList data={todolist !== undefined && todolist.items}/>
             </ScrollView>
+            <RectangleButton
+                onPress={() => this.props.createItem()}
+                text="Add"
+                height={100}
+            />
         </View>
         )
   }
@@ -26,9 +43,6 @@ export default class TodoListScreen extends Component {
 class TodoList extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            data: [{text: 'a', checked: false}, {text: 'b', checked: true}, {text: 'c', checked: true}]
-        };
     }
     _keyExtractor = (item, index) => index
 
@@ -36,10 +50,17 @@ class TodoList extends Component {
         <TodoListItem style={styles.itemSection} data={item} />
     );
 
+    componentWillReceiveProps(next) {
+        console.log(next);
+    }
+
     render() {
+        if (!this.props.data) {
+            return null;
+        }
         return (
             <FlatList
-                data={this.state.data}
+                data={this.props.data}
                 keyExtractor={this._keyExtractor}
                 renderItem={this._renderItem}
             />
@@ -62,3 +83,20 @@ class TodoListItem extends Component {
         )
     }
 }
+
+const mapStateToProps = (state, { todolist } = state) => {
+    console.log(state);
+    return {
+        todolist: todolist
+    }
+  }
+  
+  const mapDispatchToProps = (dispatch) => {
+      return {
+          readAll: () => dispatch(TodoListActions.read()),
+          createItem: () => dispatch(TodoListActions.create())
+      }
+  }
+  
+  export default connect(mapStateToProps, mapDispatchToProps)(TodoListScreen)
+  
