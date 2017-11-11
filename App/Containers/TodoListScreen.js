@@ -17,7 +17,11 @@ class TodoListScreen extends Component {
     componentWillMount() {
         this.props.readAll()
     }
-    
+
+    toggleDone({item}) {
+        this.props.toggleDone(item.id)
+    }
+
     render () {
         const { todolist } = this.props
         return (
@@ -28,7 +32,7 @@ class TodoListScreen extends Component {
                 </Text>
             </View>
             <ScrollView style={styles.section}>
-                <TodoList data={todolist !== undefined && todolist.items}/>
+                <TodoList data={todolist !== undefined && todolist.items} toggleDone={this.toggleDone.bind(this)} />
             </ScrollView>
             <RectangleButton
                 onPress={() => this.props.createItem()}
@@ -37,22 +41,20 @@ class TodoListScreen extends Component {
             />
         </View>
         )
-  }
+    }
 }
 
 class TodoList extends Component {
     constructor(props) {
         super(props);
+        console.log(this.props);
     }
     _keyExtractor = (item, index) => index
 
-    _renderItem = ({item}) => (
-        <TodoListItem style={styles.itemSection} data={item} />
-    );
-
-    componentWillReceiveProps(next) {
-        console.log(next);
-    }
+    _renderItem = ({item}) => {
+        return (
+        <TodoListItem style={styles.itemSection} data={item} toggleDone={this.props.toggleDone} />
+    )};
 
     render() {
         if (!this.props.data) {
@@ -71,15 +73,19 @@ class TodoList extends Component {
 class TodoListItem extends Component {
     constructor(props) {
         super(props);
+        console.log(this.props);
     }
+
     render() {
         return (
-            <CheckBox 
-                rightText={this.props.data.title}
-                rightTextStyle={[styles.listItemText, this.props.data.checked && styles.listItemDoneText]}
-                isChecked={this.props.data.checked}
+            <View style={{flexDirection: 'row'}}>
+                <CheckBox 
+                isChecked={this.props.data.done}
                 checkBoxColor={Colors.snow}
-                onClick={() => {}} />
+                rightTextStyle={[]}
+                onClick={() => this.props.toggleDone({item: this.props.data})} />
+                <Text style={[styles.listItemText, this.props.data.checked && styles.listItemDoneText]}>ABCDEFG{this.props.data.title}</Text>
+            </View>
         )
     }
 }
@@ -94,7 +100,8 @@ const mapStateToProps = (state, { todolist } = state) => {
   const mapDispatchToProps = (dispatch) => {
       return {
           readAll: () => dispatch(TodoListActions.read()),
-          createItem: () => dispatch(TodoListActions.create())
+          createItem: () => dispatch(TodoListActions.create()),
+          toggleDone: (id) => dispatch(TodoListActions.toggleDone(id))
       }
   }
   
